@@ -74,11 +74,22 @@
 
     @keyframes glitch {
       0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-2px, -2px); }
+      80% { transform: translate(2px, 2px); }
       100% { transform: translate(0); }
+    }
+
+    .failing {
+      animation: breakdown 0.2s steps(2, end) infinite;
+      color: #ff3333;
+    }
+
+    @keyframes breakdown {
+      0% { opacity: 1; text-shadow: 0 0 1px #ff3333; }
+      50% { opacity: 0.4; text-shadow: 0 0 10px #ff0000; }
+      100% { opacity: 1; text-shadow: 0 0 1px #ff3333; }
     }
 
     .hidden-clue {
@@ -159,11 +170,11 @@
             step++;
             output.innerHTML += `\nYour decision has been encoded.\nProcessing internal protocols...\n`;
             setTimeout(() => {
-              output.innerHTML += "\n---\nMAINFRAME ERROR 0xA7FF\nDATA CORRUPTION DETECTED\nATTEMPTING REPAIR...\n---\n";
+              output.innerHTML += "\n---\n<span class='failing'>MAINFRAME ERROR 0xA7FF</span>\n<span class='failing'>DATA CORRUPTION DETECTED</span>\n<span class='failing'>ATTEMPTING REPAIR...</span>\n---\n";
               setTimeout(() => {
                 output.innerHTML += "\nOne final prompt:\n\n";
                 output.innerHTML += "'The one who speaks most clearly... may still be hiding the most.'\nWhat is your conclusion in one word?";
-              }, 2000);
+              }, 2500);
             }, 1500);
           } else {
             output.innerHTML += "\nUnrecognized input. Choose 1 or 2.\n";
@@ -174,7 +185,7 @@
             output.innerHTML += (userChoice === '1')
               ? "\nOutcome: You chose transparency. Diplomacy persists through truth.\n"
               : "\nOutcome: You chose silence. Some secrets fuel power.\n";
-            output.innerHTML += "\nAuthorization Token: BAKIS.EXE//C0MPLETED\n\nTransmission closed.";
+            output.innerHTML += "\n<span class='failing'>Authorization Token: BAKIS.EXE//C0RRUPTED</span>\n<span class='failing'>System instability critical. This node will self-terminate.\n\n</span>";
             input.disabled = true;
           }, 2000);
         }

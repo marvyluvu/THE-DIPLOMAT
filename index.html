@@ -101,6 +101,32 @@
     .hidden-clue:hover {
       opacity: 1;
     }
+
+    .screen-glitch {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: difference;
+      animation: screenGlitch 0.2s steps(3, start) infinite;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
+    }
+
+    @keyframes screenGlitch {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(2px); }
+    }
   </style>
 </head>
 <body class="scanlines">
@@ -114,11 +140,13 @@
     </div>
     <div class="hidden-clue">// hint: they told you to seek...</div>
   </div>
+  <div class="screen-glitch" id="glitchLayer"></div>
 
   <script>
     const output = document.getElementById('output');
     const input = document.getElementById('userInput');
     const accessSound = document.getElementById('accessSound');
+    const glitchLayer = document.getElementById('glitchLayer');
 
     const binaryChallenge = "01000100 01001001 01010000 01001100 01001111 01001101 01000001 01000011 01011001";
     let step = 0;
@@ -147,6 +175,13 @@
       });
     }
 
+    function triggerGlitch(duration = 2000) {
+      glitchLayer.style.display = 'block';
+      setTimeout(() => {
+        glitchLayer.style.display = 'none';
+      }, duration);
+    }
+
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const value = input.value.trim().toLowerCase();
@@ -157,6 +192,7 @@
           if (value === 'diplomacy') {
             step++;
             accessSound.play();
+            triggerGlitch();
             output.innerHTML += "\n<span class='glitch'>[ ACCESS GRANTED ]</span>\n";
             setTimeout(() => {
               output.innerHTML += "\nWelcome, delegate.\nChoose your path:\n[1] Uphold the truth\n[2] Conceal the evidence\n\nEnter your decision:";
@@ -169,8 +205,10 @@
             userChoice = value;
             step++;
             output.innerHTML += `\nYour decision has been encoded.\nProcessing internal protocols...\n`;
+            triggerGlitch();
             setTimeout(() => {
               output.innerHTML += "\n---\n<span class='failing'>MAINFRAME ERROR 0xA7FF</span>\n<span class='failing'>DATA CORRUPTION DETECTED</span>\n<span class='failing'>ATTEMPTING REPAIR...</span>\n---\n";
+              triggerGlitch();
               setTimeout(() => {
                 output.innerHTML += "\nOne final prompt:\n\n";
                 output.innerHTML += "'The one who speaks most clearly... may still be hiding the most.'\nWhat is your conclusion in one word?";
@@ -181,6 +219,7 @@
           }
         } else if (step === 2) {
           output.innerHTML += `\nFinal entry recorded.\nAnalyzing input integrity...\n`;
+          triggerGlitch();
           setTimeout(() => {
             output.innerHTML += (userChoice === '1')
               ? "\nOutcome: You chose transparency. Diplomacy persists through truth.\n"

@@ -93,7 +93,7 @@
   </style>
 </head>
 <body class="scanlines">
-  <audio src="https://files.catbox.moe/szfw1q.mp3" autoplay loop></audio>
+  <audio id="accessSound" src="https://files.catbox.moe/nul41q.mp3" preload="auto"></audio>
   <div class="terminal">
     <div id="output" class="output"></div>
     <div class="input-line">
@@ -107,14 +107,16 @@
   <script>
     const output = document.getElementById('output');
     const input = document.getElementById('userInput');
+    const accessSound = document.getElementById('accessSound');
 
     const binaryChallenge = "01000100 01001001 01010000 01001100 01001111 01001101 01000001 01000011 01011001";
     let step = 0;
+    let userChoice = '';
 
     function typeText(text, delay = 50, callback) {
       let i = 0;
       const interval = setInterval(() => {
-        output.textContent += text.charAt(i);
+        output.innerHTML += text.charAt(i);
         i++;
         if (i >= text.length) {
           clearInterval(interval);
@@ -143,20 +145,38 @@
         if (step === 0) {
           if (value === 'diplomacy') {
             step++;
+            accessSound.play();
             output.innerHTML += "\n<span class='glitch'>[ ACCESS GRANTED ]</span>\n";
             setTimeout(() => {
-              output.innerHTML += "\nWelcome, delegate.\nChoose your path:\n[1] Uphold the truth\n[2] Conceal the evidence\n\nEnter your decision:", 40;
+              output.innerHTML += "\nWelcome, delegate.\nChoose your path:\n[1] Uphold the truth\n[2] Conceal the evidence\n\nEnter your decision:";
             }, 1000);
           } else {
             output.innerHTML += "\n<span class='glitch'>[ ACCESS DENIED ]</span>\nInvalid transmission. Try again.\n";
           }
         } else if (step === 1) {
           if (value === '1' || value === '2') {
-            output.innerHTML += `\nYour choice has been logged under clearance ID: BAKIS-π-014.\nFinal authorization pending...\n`;
+            userChoice = value;
             step++;
+            output.innerHTML += `\nYour decision has been encoded.\nProcessing internal protocols...\n`;
+            setTimeout(() => {
+              output.innerHTML += "\n---\nMAINFRAME ERROR 0xA7FF\nDATA CORRUPTION DETECTED\nATTEMPTING REPAIR...\n---\n";
+              setTimeout(() => {
+                output.innerHTML += "\nOne final prompt:\n\n";
+                output.innerHTML += "'The one who speaks most clearly... may still be hiding the most.'\nWhat is your conclusion in one word?";
+              }, 2000);
+            }, 1500);
           } else {
             output.innerHTML += "\nUnrecognized input. Choose 1 or 2.\n";
           }
+        } else if (step === 2) {
+          output.innerHTML += `\nFinal entry recorded.\nAnalyzing input integrity...\n`;
+          setTimeout(() => {
+            output.innerHTML += (userChoice === '1')
+              ? "\nOutcome: You chose transparency. Diplomacy persists through truth.\n"
+              : "\nOutcome: You chose silence. Some secrets fuel power.\n";
+            output.innerHTML += "\nAuthorization Token: BAKIS.EXE//C0MPLETED\n\nTransmission closed.";
+            input.disabled = true;
+          }, 2000);
         }
       }
     });

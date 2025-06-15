@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BAKIS MUN // CRISIS NODE</title>
   <style>
     body {
@@ -13,17 +13,11 @@
       font-size: 16px;
       overflow: hidden;
     }
-    .terminal {
-      padding: 2rem;
-    }
-    .output {
-      white-space: pre-line;
-      margin-bottom: 1rem;
-    }
-    .input-line {
-      display: flex;
-      align-items: center;
-    }
+
+    .terminal { padding: 2rem; position: relative; z-index: 1; }
+    .output { white-space: pre-line; margin-bottom: 1rem; }
+    .input-line { display: flex; align-items: center; }
+
     input {
       background: transparent;
       border: none;
@@ -33,6 +27,7 @@
       width: 60%;
       outline: none;
     }
+
     .blinker {
       width: 10px;
       height: 20px;
@@ -40,32 +35,54 @@
       animation: blink 1s step-end infinite;
       margin-left: 4px;
     }
+
     @keyframes blink { 50% { opacity: 0; } }
-    .glitch {
-      color: #00ff99;
-      text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99;
-      animation: glitch 0.5s steps(2, start) infinite;
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(0,255,153,0.03) 0px,
+        rgba(0,255,153,0.03) 1px,
+        transparent 1px,
+        transparent 2px);
+      pointer-events: none;
+      z-index: 999;
+      animation: flicker 0.1s infinite;
     }
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(2px, -2px); }
-      60% { transform: translate(-2px, -2px); }
-      80% { transform: translate(2px, 2px); }
-      100% { transform: translate(0); }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.97; }
     }
-    .failing {
-      color: #ff3333;
-      animation: breakdown 0.2s steps(2, end) infinite;
+
+    .glitch-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      mix-blend-mode: difference;
+      z-index: 1000;
+      background: repeating-linear-gradient(0deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 2px,
+        transparent 2px,
+        transparent 4px);
+      display: none;
+      animation: screenGlitch 0.2s steps(2, end) infinite;
     }
-    @keyframes breakdown {
-      0% { opacity: 1; }
-      50% { opacity: 0.4; }
-      100% { opacity: 1; }
+
+    @keyframes screenGlitch {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(2px); }
     }
   </style>
 </head>
-<body>
+<body class="scanlines">
+  <div class="glitch-layer" id="glitchLayer"></div>
   <div class="terminal">
     <div id="output" class="output"></div>
     <div class="input-line">
@@ -78,9 +95,10 @@
   <script>
     const output = document.getElementById('output');
     const input = document.getElementById('userInput');
+    const glitchLayer = document.getElementById("glitchLayer");
+
     const binaryChallenge = "01000100 01001001 01010000 01001100 01001111 01001101 01000001 01000011 01011001";
     let step = 0;
-    let choice = '';
 
     function type(text, speed = 40, cb) {
       let i = 0;
@@ -95,12 +113,15 @@
       }, speed);
     }
 
+    function triggerGlitch(duration = 1200) {
+      glitchLayer.style.display = 'block';
+      setTimeout(() => { glitchLayer.style.display = 'none'; }, duration);
+    }
+
     function boot() {
-      type("> Diplomatic Console Booting...\n", 30, () => {
-        type("> Verifying deterrence protocol integrity...\n", 30, () => {
-          type("> Incoming transmission: URGENT//CRITICAL\n", 30, () => {
-            type(`\n> TRANSMISSION (Decode):\n${binaryChallenge}\n\n> DECODE:`)
-          });
+      type("> SYSTEM BOOTING...\n", 30, () => {
+        type("> AUTH VERIFY: NUCLEAR ESCALATION PROTOCOL...\n", 30, () => {
+          type(`\n> INCOMING TRANSMISSION:\n${binaryChallenge}\n\n> TRANSLATE:`)
         });
       });
     }
@@ -114,20 +135,17 @@
         if (step === 0) {
           if (val === "diplomacy") {
             step++;
-            output.innerHTML += "\n[ ACCESS GRANTED ]\n\n> Choose:\n1. Reveal nuclear data\n2. Bury evidence\n";
+            triggerGlitch();
+            output.innerHTML += "\n[ ACCESS GRANTED ]\n\n> Choose:\n1. Reveal nuclear plans\n2. Conceal leak\n";
           } else {
-            output.innerHTML += "\n[ ACCESS DENIED ]\n> Try again.\n";
+            output.innerHTML += "\n[ ACCESS DENIED ]\n> Retry.\n";
           }
         } else if (step === 1) {
           if (val === "1" || val === "2") {
-            choice = val;
-            step++;
-            output.innerHTML += "\n> Decision recorded.\n> Awaiting outcome...\n";
+            triggerGlitch();
+            output.innerHTML += "\n> Routing to ARCHIVE NODE...\n";
             setTimeout(() => {
-              output.innerHTML += "\n>> SYSTEM CORE UNSTABLE\n>> REDIRECTING TO CLASSIFIED ARCHIVE...\n";
-              setTimeout(() => {
-                window.location.href = "archive.html";
-              }, 4000);
+              window.location.href = "archive.html";
             }, 3000);
           } else {
             output.innerHTML += "\n> Invalid. Choose 1 or 2.\n";

@@ -3,25 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // OUTCOME REPORT</title>
+  <title>BAKIS MUN // FINAL OUTCOME</title>
   <style>
     body {
-      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
     }
-    .container { max-width: 800px; margin: auto; }
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(0,255,153,0.03) 0px,
+        rgba(0,255,153,0.03) 1px,
+        transparent 1px,
+        transparent 2px);
+      pointer-events: none;
+      z-index: 999;
+      animation: flicker 0.1s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.96; }
+    }
+
+    .fadeout {
+      animation: fadeOutScreen 2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOutScreen {
+      0% { opacity: 1; }
+      100% { opacity: 0; background: black; }
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <p>> Transmission confirmed.</p>
-    <p id="summary"></p>
-    <p>> Mission log archived. Redirecting...</p>
-  </div>
+<body class="scanlines">
+  <p>> Decision encoded...</p>
+  <p id="summary"></p>
+  <p>> Logging outcome. Redirecting...</p>
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -29,32 +53,32 @@
     const reason = decodeURIComponent(params.get("reason") || "").trim();
     const summaryEl = document.getElementById("summary");
 
-    let summaryText = "";
+    let summary = "";
 
     switch (ending) {
       case "israel":
-        summaryText = "> Your authorization enabled a precision strike by Israeli forces. Retaliation is imminent. Your rationale has been preserved as a diplomatic record.";
+        summary = "> Israeli tactical strike authorized. Tehran command destabilized. UN proceedings suspended.";
         break;
       case "iran":
-        summaryText = "> Preemptive launch authorized by Iranian command. Civilians are evacuating en masse. Diplomatic backchannels have gone silent.";
+        summary = "> Iranian preemptive launch triggered. Multiple capitals on red alert. Retaliatory talks collapsed.";
         break;
       case "leak":
-        summaryText = "> You triggered a full-spectrum leak of BAKIS archives. Global media outlets are reacting. Ceasefire treaties are forming under pressure.";
+        summary = "> BAKIS archive leak initiated. Civilian uprisings spike. Emergency declassification underway.";
         break;
       default:
-        summaryText = "> Unknown decision route. Internal data mismatch.";
+        summary = "> Unknown route. Unregistered input received.";
     }
 
-    if (reason) {
-      summaryText += `\n> Justification: "${reason}"`;
-    }
+    if (reason) summary += `\n> Rationale: "${reason}"`;
 
-    summaryEl.textContent = summaryText;
+    summaryEl.textContent = summary;
 
     setTimeout(() => {
-      // Replace with your actual Google Form URL
-      window.location.href = "https://forms.gle/your-form-link-here";
-    }, 6000);
+      document.body.classList.add("fadeout");
+      setTimeout(() => {
+        window.location.href = "https://forms.gle/your-form-link-here";
+      }, 2000);
+    }, 4000);
   </script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BAKIS MUN // OUTCOME REPORT</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 2rem;
+    }
+    .container { max-width: 800px; margin: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>> Transmission confirmed.</p>
+    <p id="summary"></p>
+    <p>> Mission log archived. Redirecting...</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const ending = params.get("ending");
+    const reason = decodeURIComponent(params.get("reason") || "").trim();
+    const summaryEl = document.getElementById("summary");
+
+    let summaryText = "";
+
+    switch (ending) {
+      case "israel":
+        summaryText = "> Your authorization enabled a precision strike by Israeli forces. Retaliation is imminent. Your rationale has been preserved as a diplomatic record.";
+        break;
+      case "iran":
+        summaryText = "> Preemptive launch authorized by Iranian command. Civilians are evacuating en masse. Diplomatic backchannels have gone silent.";
+        break;
+      case "leak":
+        summaryText = "> You triggered a full-spectrum leak of BAKIS archives. Global media outlets are reacting. Ceasefire treaties are forming under pressure.";
+        break;
+      default:
+        summaryText = "> Unknown decision route. Internal data mismatch.";
+    }
+
+    if (reason) {
+      summaryText += `\n> Justification: "${reason}"`;
+    }
+
+    summaryEl.textContent = summaryText;
+
+    setTimeout(() => {
+      // Replace with your actual Google Form URL
+      window.location.href = "https://forms.gle/your-form-link-here";
+    }, 6000);
+  </script>
+</body>
+</html>

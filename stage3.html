@@ -3,65 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // STRATEGIC NODE</title>
+  <title>BAKIS MUN // STRATEGIC COMMAND NODE</title>
   <style>
     body {
-      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
+      margin: 0;
     }
-    .container { max-width: 800px; margin: auto; }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
     input, select, button {
       background: transparent;
       border: 1px solid #00ff99;
       color: #00ff99;
-      font-family: 'Courier New', monospace;
+      font-family: inherit;
       font-size: 16px;
       width: 100%;
       margin: 0.5rem 0;
       padding: 0.5rem;
       outline: none;
     }
-    button:hover { background: #00ff99; color: black; cursor: pointer; }
+
+    button:hover {
+      background: #00ff99;
+      color: black;
+      cursor: pointer;
+    }
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0,255,153,0.03) 0px,
+        rgba(0,255,153,0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 999;
+      animation: flicker 0.1s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.96; }
+    }
+
+    .glitch {
+      animation: screenGlitch 0.2s steps(2, end) infinite;
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 998;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.03) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: difference;
+      display: none;
+    }
+
+    @keyframes screenGlitch {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(2px); }
+    }
   </style>
 </head>
-<body>
+<body class="scanlines">
+  <div class="glitch" id="glitchEffect"></div>
   <div class="container">
-    <p>> Final Diplomatic Relay Engaged...</p>
-    <p>> Global nuclear readiness: <span style="color:red;">CRITICAL</span></p>
-    <p>> Select your course of action:</p>
+    <p>> Live nuclear readiness: <span style="color:red;">CRITICAL</span></p>
+    <p>> Command node: UNSTRAT BAKIS</p>
+    <p>> FINAL STRATEGIC DECISION REQUIRED:</p>
 
     <form onsubmit="return submitDecision()">
       <label>[1] Authorize Israeli Tactical Strike</label><br>
       <label>[2] Approve Iranian Preemptive Launch</label><br>
       <label>[3] Leak BAKIS Internal Archives</label><br><br>
+
       <select id="actionChoice" required>
-        <option value="">-- Select Option --</option>
+        <option value="">-- SELECT STRATEGIC PATH --</option>
         <option value="israel">1 - Israeli Strike</option>
         <option value="iran">2 - Iranian Launch</option>
         <option value="leak">3 - Leak Archives</option>
       </select>
 
-      <p>> Brief justification (logged to command node):</p>
-      <input type="text" id="justification" placeholder="e.g. To delay retaliation, we must strike first." maxlength="100" />
+      <p>> Log your justification (classified):</p>
+      <input type="text" id="justification" placeholder="e.g. To destabilize command chain..." maxlength="100" />
 
       <button type="submit">TRANSMIT DECISION</button>
     </form>
   </div>
 
   <script>
+    function triggerGlitch(duration = 1200) {
+      const el = document.getElementById("glitchEffect");
+      el.style.display = "block";
+      setTimeout(() => {
+        el.style.display = "none";
+      }, duration);
+    }
+
     function submitDecision() {
       const choice = document.getElementById("actionChoice").value;
       const reason = document.getElementById("justification").value.trim();
-      const summary = encodeURIComponent(reason);
+      const encoded = encodeURIComponent(reason);
 
       if (!choice) return false;
 
-      // Redirect to outcome screen
-      window.location.href = `outcome.html?ending=${choice}&reason=${summary}`;
+      triggerGlitch();
+
+      setTimeout(() => {
+        window.location.href = `outcome.html?ending=${choice}&reason=${encoded}`;
+      }, 1800);
+
       return false;
     }
   </script>

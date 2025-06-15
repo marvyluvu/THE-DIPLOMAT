@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // FINAL OUTCOME</title>
+  <title>BAKIS MUN // ARCHIVE NODE</title>
   <style>
     body {
       background: black;
@@ -11,7 +11,26 @@
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
+      margin: 0;
     }
+
+    .terminal {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #00ff99;
+      color: #00ff99;
+      font-family: inherit;
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
     .scanlines::before {
       content: "";
       position: fixed;
@@ -29,56 +48,41 @@
 
     @keyframes flicker {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.96; }
-    }
-
-    .fadeout {
-      animation: fadeOutScreen 2s ease-in-out forwards;
-    }
-
-    @keyframes fadeOutScreen {
-      0% { opacity: 1; }
-      100% { opacity: 0; background: black; }
+      50% { opacity: 0.97; }
     }
   </style>
 </head>
 <body class="scanlines">
-  <p>> Decision encoded...</p>
-  <p id="summary"></p>
-  <p>> Logging outcome. Redirecting...</p>
+  <div class="terminal">
+    <p>> Connecting to secure archive subsystem...</p>
+    <p>> Status: <span style="color:red;">REDACTED</span></p>
+    <p>> Logs available:</p>
+    <p>📄 regional_targets.log <span>[DAMAGED]</span></p>
+    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun" style="color:#00ffaa" target="_blank">[MORSE TRANSMISSION]</a></p>
+
+    <p><br>> Decryption key required to access final node:</p>
+    <form onsubmit="return checkAccess()">
+      <input type="text" id="accessKey" placeholder="ENTER KEYWORD..." autofocus autocomplete="off" />
+    </form>
+    <p id="result"></p>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const ending = params.get("ending");
-    const reason = decodeURIComponent(params.get("reason") || "").trim();
-    const summaryEl = document.getElementById("summary");
+    function checkAccess() {
+      const val = document.getElementById("accessKey").value.trim().toLowerCase();
+      const result = document.getElementById("result");
 
-    let summary = "";
+      if (val === "unity") {
+        result.textContent = "> Decryption accepted. Launching FINAL NODE...";
+        setTimeout(() => {
+          window.location.href = "stage3.html";
+        }, 2500);
+      } else {
+        result.textContent = "> ACCESS DENIED: Invalid keyword.";
+      }
 
-    switch (ending) {
-      case "israel":
-        summary = "> Israeli tactical strike authorized. Tehran command destabilized. UN proceedings suspended.";
-        break;
-      case "iran":
-        summary = "> Iranian preemptive launch triggered. Multiple capitals on red alert. Retaliatory talks collapsed.";
-        break;
-      case "leak":
-        summary = "> BAKIS archive leak initiated. Civilian uprisings spike. Emergency declassification underway.";
-        break;
-      default:
-        summary = "> Unknown route. Unregistered input received.";
+      return false;
     }
-
-    if (reason) summary += `\n> Rationale: "${reason}"`;
-
-    summaryEl.textContent = summary;
-
-    setTimeout(() => {
-      document.body.classList.add("fadeout");
-      setTimeout(() => {
-        window.location.href = "https://forms.gle/your-form-link-here";
-      }, 2000);
-    }, 4000);
   </script>
 </body>
 </html>

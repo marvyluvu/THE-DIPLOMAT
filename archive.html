@@ -2,59 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BAKIS MUN // ARCHIVE NODE</title>
   <style>
     body {
-      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
     }
-    .terminal { max-width: 960px; margin: 0 auto; }
-    a { color: #00ffaa; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .hidden-input {
+    .terminal { max-width: 800px; margin: auto; }
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(0,255,153,0.03) 0px,
+        rgba(0,255,153,0.03) 1px,
+        transparent 1px,
+        transparent 2px);
+      pointer-events: none;
+      z-index: 999;
+      animation: flicker 0.1s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.96; }
+    }
+
+    input {
       background: transparent;
       border: none;
       color: #00ff99;
-      font-family: 'Courier New', monospace;
+      font-family: inherit;
       font-size: 16px;
       outline: none;
       width: 100%;
+      margin-top: 10px;
     }
   </style>
 </head>
-<body>
+<body class="scanlines">
   <div class="terminal">
-    <p>> Emergency archive unlocked...</p>
-    <p>> Status: ⚠️ Crisis Protocol Online</p>
-    <p>> Files Recovered:</p>
-    <p>📄 launch_authority_override.pdf <span style="color:red">[CORRUPTED]</span></p>
-    <p>📄 regional_targets.log <a href="#">[INTERCEPTED]</a></p>
-    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun">[MORSE TRANSMISSION]</a></p>
-    <p>📄 peace_treaty_draft.txt <span style="color:gray">[LOCKED]</span></p>
-    <p><br>> Enter the phrase encoded in the transmission:</p>
+    <p>> Decryption tunnel engaged...</p>
+    <p>> Status: STRATEGIC READINESS LEVEL — <span style="color:red">RED</span></p>
+    <p>> Archive Logs:</p>
+    <p>📄 regional_targets.log <span>[CORRUPTED]</span></p>
+    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun" style="color:#00ffaa">[MORSE TRANSMISSION]</a></p>
+    <p><br>> Decryption required. Enter keyword:</p>
+
     <form onsubmit="return checkAccess()">
-      <input type="text" id="accessKey" class="hidden-input" autofocus autocomplete="off" />
+      <input type="text" id="accessKey" placeholder="e.g. unity" autofocus autocomplete="off" />
     </form>
     <p id="result"></p>
   </div>
 
   <script>
     function checkAccess() {
-      const value = document.getElementById("accessKey").value.trim().toLowerCase();
+      const val = document.getElementById("accessKey").value.trim().toLowerCase();
       const result = document.getElementById("result");
 
-      if (value === "unity") {
-        result.innerHTML = "> Clearance accepted. Preparing final fallback protocol...";
+      if (val === "unity") {
+        result.textContent = "> Transmission confirmed. Launching FINAL NODE...";
         setTimeout(() => {
           window.location.href = "stage3.html";
         }, 2500);
       } else {
-        result.innerHTML = "> ACCESS DENIED: Incorrect transmission phrase.";
+        result.textContent = "> ACCESS DENIED: Invalid phrase.";
       }
       return false;
     }

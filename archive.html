@@ -13,17 +13,9 @@
       font-size: 16px;
       padding: 2rem;
     }
-    .terminal {
-      max-width: 960px;
-      margin: 0 auto;
-    }
-    a {
-      color: #00ffaa;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+    .terminal { max-width: 960px; margin: 0 auto; }
+    a { color: #00ffaa; text-decoration: none; }
+    a:hover { text-decoration: underline; }
     .hidden-input {
       background: transparent;
       border: none;
@@ -37,18 +29,14 @@
 </head>
 <body>
   <div class="terminal">
-    <p>> Initializing BAKIS classified archive...</p>
-    <p>> Node integrity: <span style="color:red">CORRUPTED</span></p>
-    <p>> Retrieving secured diplomatic files...</p>
-    <br />
-    <p>📄 nuclear_posture_memo.pdf <span style="color:red">[CORRUPTED]</span></p>
-    <p>📄 log_03_councilstream.txt <a href="#">[INTERCEPTED]</a></p>
-    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun">[TRANSMITTED ON IG]</a></p>
-    <p>📄 ai_generated_wargame.sim <span style="color:orange">[REDACTED]</span></p>
-    <p>📄 peace_communique_draft.txt <span style="color:gray">[LOCKED]</span></p>
-    <br />
-    <p>> Final clearance required to proceed.</p>
-    <p>> Enter the word encoded in the transmission:</p>
+    <p>> Emergency archive unlocked...</p>
+    <p>> Status: ⚠️ Crisis Protocol Online</p>
+    <p>> Files Recovered:</p>
+    <p>📄 launch_authority_override.pdf <span style="color:red">[CORRUPTED]</span></p>
+    <p>📄 regional_targets.log <a href="#">[INTERCEPTED]</a></p>
+    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun">[MORSE TRANSMISSION]</a></p>
+    <p>📄 peace_treaty_draft.txt <span style="color:gray">[LOCKED]</span></p>
+    <p><br>> Enter the phrase encoded in the transmission:</p>
     <form onsubmit="return checkAccess()">
       <input type="text" id="accessKey" class="hidden-input" autofocus autocomplete="off" />
     </form>
@@ -61,12 +49,12 @@
       const result = document.getElementById("result");
 
       if (value === "unity") {
-        result.innerHTML = "> Access Granted: Welcome, operative. Redirecting to secured protocol...";
+        result.innerHTML = "> Clearance accepted. Preparing final fallback protocol...";
         setTimeout(() => {
-          window.location.href = "stage3.html"; // or any next page
+          window.location.href = "stage3.html";
         }, 2500);
       } else {
-        result.innerHTML = "> ACCESS DENIED: Incorrect signal phrase.";
+        result.innerHTML = "> ACCESS DENIED: Incorrect transmission phrase.";
       }
       return false;
     }

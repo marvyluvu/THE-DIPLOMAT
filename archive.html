@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BAKIS MUN // ARCHIVE NODE</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 2rem;
+    }
+    .terminal {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    a {
+      color: #00ffaa;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .hidden-input {
+      background: transparent;
+      border: none;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <p>> Initializing BAKIS classified archive...</p>
+    <p>> Node integrity: <span style="color:red">CORRUPTED</span></p>
+    <p>> Retrieving secured diplomatic files...</p>
+    <br />
+    <p>📄 nuclear_posture_memo.pdf <span style="color:red">[CORRUPTED]</span></p>
+    <p>📄 log_03_councilstream.txt <a href="#">[INTERCEPTED]</a></p>
+    <p>📄 raw_military_signal.wav <a href="https://instagram.com/BAKISMUN">[TRANSMITTED ON IG]</a></p>
+    <p>📄 ai_generated_wargame.sim <span style="color:orange">[REDACTED]</span></p>
+    <p>📄 peace_communique_draft.txt <span style="color:gray">[LOCKED]</span></p>
+    <br />
+    <p>> Final clearance required to proceed.</p>
+    <p>> Enter the word encoded in the transmission:</p>
+    <form onsubmit="return checkAccess()">
+      <input type="text" id="accessKey" class="hidden-input" autofocus autocomplete="off" />
+    </form>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function checkAccess() {
+      const value = document.getElementById("accessKey").value.trim().toLowerCase();
+      const result = document.getElementById("result");
+
+      if (value === "unity") {
+        result.innerHTML = "> Access Granted: Welcome, operative. Redirecting to secured protocol...";
+        setTimeout(() => {
+          window.location.href = "stage3.html"; // Or a Google Form, etc.
+        }, 2500);
+      } else {
+        result.innerHTML = "> ACCESS DENIED: Incorrect signal phrase.";
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

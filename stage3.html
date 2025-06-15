@@ -3,31 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // FINAL NODE</title>
+  <title>BAKIS MUN // STRATEGIC NODE</title>
   <style>
     body {
       margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
+      font-size: 16px;
       padding: 2rem;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
+    .container { max-width: 800px; margin: auto; }
+    input, select, button {
+      background: transparent;
+      border: 1px solid #00ff99;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      outline: none;
     }
+    button:hover { background: #00ff99; color: black; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
-    <p>> Final access granted</p>
-    <p>> This terminal marks the final moment of global escalation...</p>
-    <p>> Would you:</p>
-    <ul>
-      <li><a href="#">Submit de-escalation treaty draft</a></li>
-      <li><a href="#">Authorize retaliation (requires override)</a></li>
-    </ul>
-    <p><br>> Awaiting delegate decision...</p>
+    <p>> Final Diplomatic Relay Engaged...</p>
+    <p>> Global nuclear readiness: <span style="color:red;">CRITICAL</span></p>
+    <p>> Select your course of action:</p>
+
+    <form onsubmit="return submitDecision()">
+      <label>[1] Authorize Israeli Tactical Strike</label><br>
+      <label>[2] Approve Iranian Preemptive Launch</label><br>
+      <label>[3] Leak BAKIS Internal Archives</label><br><br>
+      <select id="actionChoice" required>
+        <option value="">-- Select Option --</option>
+        <option value="israel">1 - Israeli Strike</option>
+        <option value="iran">2 - Iranian Launch</option>
+        <option value="leak">3 - Leak Archives</option>
+      </select>
+
+      <p>> Brief justification (logged to command node):</p>
+      <input type="text" id="justification" placeholder="e.g. To delay retaliation, we must strike first." maxlength="100" />
+
+      <button type="submit">TRANSMIT DECISION</button>
+    </form>
   </div>
+
+  <script>
+    function submitDecision() {
+      const choice = document.getElementById("actionChoice").value;
+      const reason = document.getElementById("justification").value.trim();
+      const summary = encodeURIComponent(reason);
+
+      if (!choice) return false;
+
+      // Redirect to outcome screen
+      window.location.href = `outcome.html?ending=${choice}&reason=${summary}`;
+      return false;
+    }
+  </script>
 </body>
 </html>

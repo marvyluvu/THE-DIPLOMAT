@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // ARCHIVE NODE</title>
+  <title>BAKIS MUN // FINAL OUTCOME</title>
   <style>
     body {
       background: black;
@@ -12,8 +12,6 @@
       font-size: 16px;
       padding: 2rem;
     }
-    .terminal { max-width: 800px; margin: auto; }
-
     .scanlines::before {
       content: "";
       position: fixed;
@@ -34,48 +32,53 @@
       50% { opacity: 0.96; }
     }
 
-    input {
-      background: transparent;
-      border: none;
-      color: #00ff99;
-      font-family: inherit;
-      font-size: 16px;
-      outline: none;
-      width: 100%;
-      margin-top: 10px;
+    .fadeout {
+      animation: fadeOutScreen 2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOutScreen {
+      0% { opacity: 1; }
+      100% { opacity: 0; background: black; }
     }
   </style>
 </head>
 <body class="scanlines">
-  <div class="terminal">
-    <p>> Decryption tunnel engaged...</p>
-    <p>> Status: STRATEGIC READINESS LEVEL — <span style="color:red">RED</span></p>
-    <p>> Archive Logs:</p>
-    <p>📄 regional_targets.log <span>[CORRUPTED]</span></p>
-    <p>📄 raw_military_signal.wav <a href="https://instagram.com/bakismun" style="color:#00ffaa">[MORSE TRANSMISSION]</a></p>
-    <p><br>> Decryption required. Enter keyword:</p>
-
-    <form onsubmit="return checkAccess()">
-      <input type="text" id="accessKey" placeholder="e.g. unity" autofocus autocomplete="off" />
-    </form>
-    <p id="result"></p>
-  </div>
+  <p>> Decision encoded...</p>
+  <p id="summary"></p>
+  <p>> Logging outcome. Redirecting...</p>
 
   <script>
-    function checkAccess() {
-      const val = document.getElementById("accessKey").value.trim().toLowerCase();
-      const result = document.getElementById("result");
+    const params = new URLSearchParams(window.location.search);
+    const ending = params.get("ending");
+    const reason = decodeURIComponent(params.get("reason") || "").trim();
+    const summaryEl = document.getElementById("summary");
 
-      if (val === "unity") {
-        result.textContent = "> Transmission confirmed. Launching FINAL NODE...";
-        setTimeout(() => {
-          window.location.href = "stage3.html";
-        }, 2500);
-      } else {
-        result.textContent = "> ACCESS DENIED: Invalid phrase.";
-      }
-      return false;
+    let summary = "";
+
+    switch (ending) {
+      case "israel":
+        summary = "> Israeli tactical strike authorized. Tehran command destabilized. UN proceedings suspended.";
+        break;
+      case "iran":
+        summary = "> Iranian preemptive launch triggered. Multiple capitals on red alert. Retaliatory talks collapsed.";
+        break;
+      case "leak":
+        summary = "> BAKIS archive leak initiated. Civilian uprisings spike. Emergency declassification underway.";
+        break;
+      default:
+        summary = "> Unknown route. Unregistered input received.";
     }
+
+    if (reason) summary += `\n> Rationale: "${reason}"`;
+
+    summaryEl.textContent = summary;
+
+    setTimeout(() => {
+      document.body.classList.add("fadeout");
+      setTimeout(() => {
+        window.location.href = "https://forms.gle/your-form-link-here";
+      }, 2000);
+    }, 4000);
   </script>
 </body>
 </html>

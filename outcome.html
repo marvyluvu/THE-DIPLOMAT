@@ -66,7 +66,7 @@
 </head>
 <body class="scanlines">
   <div id="summary">
-    <p>Compiling event records...</p>
+    <p>Compiling encrypted mission transcript...</p>
   </div>
 
   <script>
@@ -76,18 +76,18 @@
     function displaySummary() {
       if (ending === "strike") {
         summary.innerHTML = `
-          <p class="glitch">[ OUTCOME: PREEMPTIVE STRIKE ]</p>
-          <p>Orders were confirmed. Warheads launched toward suspected targets. Communications blackout follows.</p>
-          <p>World leaders condemn or vanish. Historians left with fragments.</p>
+          <p class="glitch">[ OUTCOME: STRATEGIC STRIKE INITIATED ]</p>
+          <p>Launch sequence confirmed. Targets eliminated. Collateral data pending declassification.</p>
+          <p>Global comms destabilized. Delegation dissolved. Memory scrubbed.</p>
         `;
       } else if (ending === "peace") {
         summary.innerHTML = `
-          <p class="glitch">[ OUTCOME: DIPLOMATIC RESOLUTION ]</p>
-          <p>You transmitted a ceasefire appeal moments before escalation. A tenuous peace holds—for now.</p>
-          <p>Delegates hail your restraint. But surveillance continues.</p>
+          <p class="glitch">[ OUTCOME: NEGOTIATED TRUCE ]</p>
+          <p>Peace overture received. Tensions subside—for now. Delegation hailed for calculated restraint.</p>
+          <p>Surveillance satellites remain active. Monitoring continues.</p>
         `;
       } else {
-        summary.innerHTML = `> INVALID TERMINAL ACCESS. MISSION RECORD CORRUPTED.`;
+        summary.innerHTML = "> TERMINAL ERROR: OUTCOME CORRUPTED.";
         return;
       }
 

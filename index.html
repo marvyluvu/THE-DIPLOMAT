@@ -2,52 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BAKIS MUN // MAINFRAME ACCESS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BAKIS MUN // CRISIS NODE</title>
   <style>
     body {
+      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
-      line-height: 1.6;
-      padding: 2rem;
-      margin: 0;
       overflow: hidden;
     }
-    .scanlines::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 255, 153, 0.05) 0px,
-        rgba(0, 255, 153, 0.05) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      z-index: 5;
-      animation: flicker 0.2s infinite;
-    }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.9; }
-    }
+
+    .terminal { padding: 2rem; position: relative; z-index: 1; }
     .output { white-space: pre-line; margin-bottom: 1rem; }
     .input-line { display: flex; align-items: center; }
+
     input {
       background: transparent;
       border: none;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
-      outline: none;
       width: 60%;
+      outline: none;
     }
+
     .blinker {
       width: 10px;
       height: 20px;
@@ -55,91 +35,126 @@
       animation: blink 1s step-end infinite;
       margin-left: 4px;
     }
+
     @keyframes blink { 50% { opacity: 0; } }
-    .glitch {
-      animation: glitch 0.3s infinite;
-      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(0,255,153,0.03) 0px,
+        rgba(0,255,153,0.03) 1px,
+        transparent 1px,
+        transparent 2px);
+      pointer-events: none;
+      z-index: 999;
+      animation: flicker 0.1s infinite;
     }
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
-      100% { transform: translate(0); }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.97; }
     }
-    .hint { opacity: 0.1; font-size: 12px; }
-    .hint:hover { opacity: 1; }
+
+    .glitch-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      mix-blend-mode: difference;
+      z-index: 1000;
+      background: repeating-linear-gradient(0deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 2px,
+        transparent 2px,
+        transparent 4px);
+      display: none;
+      animation: screenGlitch 0.2s steps(2, end) infinite;
+    }
+
+    @keyframes screenGlitch {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(2px); }
+    }
   </style>
 </head>
 <body class="scanlines">
-  <div>
+  <div class="glitch-layer" id="glitchLayer"></div>
+  <div class="terminal">
     <div id="output" class="output"></div>
     <div class="input-line">
       <span>&gt;</span>
-      <input type="text" id="userInput" autofocus autocomplete="off" />
+      <input type="text" id="userInput" autofocus autocomplete="off"/>
       <span class="blinker"></span>
     </div>
-    <div class="hint">// hint: translate morse from instagram</div>
   </div>
 
   <script>
-    const output = document.getElementById("output");
-    const input = document.getElementById("userInput");
+    const output = document.getElementById('output');
+    const input = document.getElementById('userInput');
+    const glitchLayer = document.getElementById("glitchLayer");
+
+    const binaryChallenge = "01000100 01001001 01010000 01001100 01001111 01001101 01000001 01000011 01011001";
     let step = 0;
 
-    function typeText(text, delay = 50, cb) {
+    function type(text, speed = 40, cb) {
       let i = 0;
-      const int = setInterval(() => {
-        output.innerHTML += text.charAt(i++);
-        if (i >= text.length) {
-          clearInterval(int);
-          output.innerHTML += "\n";
+      const interval = setInterval(() => {
+        output.innerHTML += text[i];
+        i++;
+        if (i === text.length) {
+          clearInterval(interval);
+          output.innerHTML += '\n';
           if (cb) cb();
         }
-      }, delay);
+      }, speed);
     }
 
-    function bootSequence() {
-      typeText("BAKIS MUN BIOS v1.9.74\n", 30, () => {
-        typeText("Initializing diplomatic node...\n", 30, () => {
-          typeText("Awaiting authorization key:\n\n", 30);
+    function triggerGlitch(duration = 1200) {
+      glitchLayer.style.display = 'block';
+      setTimeout(() => { glitchLayer.style.display = 'none'; }, duration);
+    }
+
+    function boot() {
+      type("> SYSTEM BOOTING...\n", 30, () => {
+        type("> AUTH VERIFY: NUCLEAR ESCALATION PROTOCOL...\n", 30, () => {
+          type(`\n> INCOMING TRANSMISSION:\n${binaryChallenge}\n\n> TRANSLATE:`)
         });
       });
-    }
-
-    function triggerGlitch() {
-      output.innerHTML += "\n▒▒▒ SYSTEM GLITCH ▒▒▒\n";
     }
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const val = input.value.trim().toLowerCase();
-        input.value = "";
         output.innerHTML += `\n> ${val}\n`;
+        input.value = "";
 
         if (step === 0) {
-          if (btoa(val) === "ZGlwbG9tYWN5") { // "diplomacy"
+          if (val === "diplomacy") {
             step++;
             triggerGlitch();
-            output.innerHTML += "\n[ ACCESS GRANTED ]\n\nChoose:\n1. Reveal nuclear plans\n2. Conceal leak\n";
+            output.innerHTML += "\n[ ACCESS GRANTED ]\n\n> Choose:\n1. Reveal nuclear plans\n2. Conceal leak\n";
           } else {
-            output.innerHTML += "\n[ ACCESS DENIED ]\n> Try again.\n";
+            output.innerHTML += "\n[ ACCESS DENIED ]\n> Retry.\n";
           }
         } else if (step === 1) {
           if (val === "1" || val === "2") {
-            output.innerHTML += "\nRouting to ARCHIVE NODE...\n";
+            triggerGlitch();
+            output.innerHTML += "\n> Routing to ARCHIVE NODE...\n";
             setTimeout(() => {
-              window.location.href = "archive.html";
+              window.location.href = "archive.html?from=index";
             }, 3000);
           } else {
-            output.innerHTML += "\nInvalid. Choose 1 or 2.\n";
+            output.innerHTML += "\n> Invalid. Choose 1 or 2.\n";
           }
         }
       }
     });
 
-    bootSequence();
+    boot();
   </script>
 </body>
 </html>

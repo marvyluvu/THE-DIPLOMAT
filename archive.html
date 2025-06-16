@@ -1,3 +1,4 @@
+<!-- archive.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,39 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ARCHIVE NODE</title>
   <style>
-    body { background: black; color: #00ff99; font-family: 'Courier New', monospace; padding: 2rem; }
-    input { background: transparent; border: none; color: #00ff99; font-family: 'Courier New'; font-size: 16px; width: 60%; outline: none; }
-    .blinker { width: 10px; height: 20px; background: #00ff99; animation: blink 1s step-end infinite; margin-left: 4px; }
-    @keyframes blink { 50% { opacity: 0; } }
+    body {
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+      font-size: 16px;
+    }
+    button {
+      background: transparent;
+      color: #00ff99;
+      font-family: inherit;
+      font-size: 16px;
+      border: 1px solid #00ff99;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    .glitch {
+      animation: flicker 0.15s infinite;
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.03) 0px, rgba(0,255,153,0.03) 1px, transparent 1px, transparent 2px);
+      z-index: 999;
+      animation: flicker 0.1s infinite;
+    }
   </style>
 </head>
-<body>
-  <p>ENTER ARCHIVE ACCESS KEY:</p>
-  <form onsubmit="return checkAccess()">
-    > <input id="accessInput" type="text" autofocus autocomplete="off" />
-    <span class="blinker"></span>
-  </form>
-  <p id="result"></p>
+<body class="scanlines">
+  <div>
+    <p class="glitch">ARCHIVE NODE SECURED.</p>
+    <p>Select protocol to continue:</p>
+    <button onclick="validate('unity')">Submit keyword: UNITY</button>
+    <button onclick="validate('roll')">Access hidden audio transmission</button>
+    <p id="feedback"></p>
+  </div>
+
   <script>
     const fromIndex = new URLSearchParams(window.location.search).get("from");
     if (fromIndex !== "index") {
-      document.body.innerHTML = "> ACCESS DENIED: INVALID ENTRY POINT.";
+      document.body.innerHTML = "> ACCESS DENIED: INVALID NODE ENTRY.";
     }
-    function checkAccess() {
-      const val = document.getElementById("accessInput").value.trim().toLowerCase();
-      const encoded = btoa(val);
-      const result = document.getElementById("result");
 
-      if (encoded === "dW5pdHk=") { 
-        result.innerHTML = "> Access granted. Redirecting...";
+    function validate(input) {
+      const feedback = document.getElementById("feedback");
+      if (input === "unity") {
+        feedback.innerText = "> Access Granted. Redirecting to final decision node...";
         setTimeout(() => window.location.href = "stage3.html", 2000);
-      } else if (val === "roll") {
-        result.innerHTML = "> Media artifact recovered. Routing to legacy...";
+      } else if (input === "roll") {
+        feedback.innerText = "> Playing historical transmission...";
         setTimeout(() => window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1500);
       } else {
-        result.innerHTML = "> ACCESS DENIED: Invalid keyword.";
+        feedback.innerText = "> Invalid protocol.";
       }
-      return false;
     }
   </script>
 </body>

@@ -13,20 +13,32 @@
       padding: 2rem;
       font-size: 16px;
     }
-    input, button {
+    input {
       background: transparent;
       color: #00ff99;
+      border: 1px solid #00ff99;
       font-family: inherit;
       font-size: 16px;
-      border: 1px solid #00ff99;
-      margin-top: 1rem;
       padding: 0.5rem 1rem;
-    }
-    input {
+      margin-top: 1rem;
       width: 200px;
     }
-    button {
+    button, .entry {
+      display: block;
+      margin-top: 1rem;
+      color: #00ffaa;
+      background: transparent;
+      font-family: inherit;
+      font-size: 16px;
+      border: none;
+      text-align: left;
       cursor: pointer;
+      text-decoration: underline;
+    }
+    .entry.locked {
+      color: #888;
+      text-decoration: none;
+      cursor: not-allowed;
     }
     .glitch {
       animation: flicker 0.15s infinite;
@@ -45,15 +57,27 @@
       z-index: 999;
       animation: flicker 0.1s infinite;
     }
+    .header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body class="scanlines">
   <div>
-    <p class="glitch">ARCHIVE NODE SECURED.</p>
-    <p>Enter keyword from transmission video:</p>
+    <p class="glitch header">ARCHIVE NODE // ENCRYPTED DOCUMENT INDEX</p>
+
+    <p class="entry locked">delegate-records.pdf [LOCKED]</p>
+    <p class="entry locked">cyberdefense-protocol.txt [LOCKED]</p>
+    <p class="entry" onclick="rickroll()">audio-transmission.mp3 [ACCESS]</p>
+    <a class="entry" href="https://instagram.com/bakismun" target="_blank">transmission-logs.html [ACCESS]</a>
+    <p class="entry locked">strategic-intel.map [LOCKED]</p>
+    <p class="entry locked">classified-orders.txt [LOCKED]</p>
+
+    <p>Enter keyword from intercepted Morse transmission to unlock classified node:</p>
     <input type="text" id="codeInput" placeholder="Enter keyword...">
     <button onclick="submitCode()">Submit</button>
-    <button onclick="rickroll()">Access hidden transmission</button>
     <p id="feedback"></p>
   </div>
 

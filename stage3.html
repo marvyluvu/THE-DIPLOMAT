@@ -2,109 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRISIS NODE // FINAL DECISION</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRISIS NODE // FINAL CHOICE</title>
   <style>
     body {
+      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
-      margin: 0;
     }
+
     .scanlines::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       pointer-events: none;
-      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.03) 0px, rgba(0,255,153,0.03) 1px, transparent 1px, transparent 2px);
-      z-index: 999;
-      animation: flicker 0.1s infinite;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(0,255,153,0.05) 0px,
+        rgba(0,255,153,0.05) 1px,
+        transparent 1px,
+        transparent 2px);
+      z-index: 5;
+      animation: flicker 0.2s infinite;
     }
+
     @keyframes flicker {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.96; }
+      50% { opacity: 0.9; }
     }
-    .terminal {
-      max-width: 800px;
-      margin: auto;
-    }
+
     input {
       background: transparent;
-      color: #00ff99;
       border: none;
-      font-family: inherit;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
       font-size: 16px;
       outline: none;
       width: 60%;
     }
+
     .blinker {
-      display: inline-block;
       width: 10px;
-      height: 18px;
+      height: 20px;
       background: #00ff99;
       animation: blink 1s step-end infinite;
       margin-left: 4px;
     }
+
     @keyframes blink { 50% { opacity: 0; } }
+
     .glitch {
-      text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99;
+      animation: glitch 0.3s infinite;
+      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
     }
-    .overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      pointer-events: none;
-      mix-blend-mode: screen;
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(1px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
+    }
+
+    #countdown {
+      color: red;
+      font-weight: bold;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body class="scanlines">
-  <div class="terminal">
-    <p class="glitch">// DIPLOMATIC ACTION REQUIRED</p>
-    <p class="glitch">INCOMING THREAT REPORT: HIGH-ALTITUDE PAYLOAD ARMED</p>
-    <p class="glitch">RESPONSE WINDOW: 90 SECONDS</p>
-    <br>
-    <p>CHOOSE RESPONSE PROTOCOL:</p>
-    <p>1. INITIATE STRATEGIC STRIKE</p>
-    <p>2. ENGAGE IN DIPLOMATIC COMMUNICATION</p>
-    <br>
+  <div>
+    <p>INCOMING DIPLOMATIC CRISIS:</p>
+    <p>A nuclear payload has been activated in response to unidentified aggression.</p>
+    <p>You must decide how to proceed:</p>
+    <p>1. Launch preemptive strike</p>
+    <p>2. Attempt final negotiation</p>
+    <p id="countdown">Decision Required In: 00:30</p>
+    <p>Enter your choice:</p>
     <form onsubmit="return choose()">
       &gt; <input id="finalInput" type="text" autofocus autocomplete="off" />
       <span class="blinker"></span>
     </form>
     <p id="verdict"></p>
   </div>
-  <div class="overlay"></div>
 
   <script>
     if (!document.referrer.includes("archive.html")) {
       document.body.innerHTML = "> ACCESS BLOCKED: UNAUTHORIZED NODE ENTRY.";
     }
 
+    let timeLeft = 30;
+    const countdownEl = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = `Decision Required In: 00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.href = "failure.html";
+      }
+    }, 1000);
+
     function choose() {
+      clearInterval(timer);
       const val = document.getElementById("finalInput").value.trim();
       const verdict = document.getElementById("verdict");
 
       if (val === "1") {
-        verdict.innerHTML = "> Confirmed. STRATEGIC LAUNCH INITIATED...";
+        verdict.innerHTML = "Routing strategic launch directive...";
         setTimeout(() => {
           window.location.href = "outcome.html?ending=strike";
-        }, 3000);
+        }, 2000);
       } else if (val === "2") {
-        verdict.innerHTML = "> Transmitting FINAL PEACE PROPOSAL...";
+        verdict.innerHTML = "Transmitting final diplomatic overture...";
         setTimeout(() => {
           window.location.href = "outcome.html?ending=peace";
-        }, 3000);
+        }, 2000);
       } else {
-        verdict.innerHTML = "> INVALID RESPONSE CODE.";
+        verdict.innerHTML = "> INVALID SELECTION.";
       }
+
       return false;
     }
   </script>

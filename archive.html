@@ -3,95 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARCHIVE NODE // ENCRYPTED ENTRY</title>
+  <title>ARCHIVE NODE</title>
   <style>
-    body {
-      margin: 0;
-      background: black;
-      color: #00ff99;
-      font-family: 'Courier New', monospace;
-      font-size: 16px;
-      padding: 2rem;
-    }
-    .scanlines::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
-      z-index: 5;
-      animation: flicker 0.2s infinite;
-    }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.9; }
-    }
-    input {
-      background: transparent;
-      border: none;
-      color: #00ff99;
-      font-family: 'Courier New', monospace;
-      font-size: 16px;
-      outline: none;
-      width: 60%;
-    }
-    .blinker {
-      width: 10px;
-      height: 20px;
-      background: #00ff99;
-      animation: blink 1s step-end infinite;
-      margin-left: 4px;
-    }
+    body { background: black; color: #00ff99; font-family: 'Courier New', monospace; padding: 2rem; }
+    input { background: transparent; border: none; color: #00ff99; font-family: 'Courier New'; font-size: 16px; width: 60%; outline: none; }
+    .blinker { width: 10px; height: 20px; background: #00ff99; animation: blink 1s step-end infinite; margin-left: 4px; }
     @keyframes blink { 50% { opacity: 0; } }
-    .glitch {
-      animation: glitch 0.3s infinite;
-      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
-    }
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
-      100% { transform: translate(0); }
-    }
-    .hint { opacity: 0.1; font-size: 12px; }
-    .hint:hover { opacity: 1; }
   </style>
 </head>
-<body class="scanlines">
-  <div>
-    <p>ENCRYPTED ARCHIVE KEY REQUIRED:</p>
-    <form onsubmit="return checkAccess()">
-      &gt; <input id="accessKey" type="text" autofocus autocomplete="off" />
-      <span class="blinker"></span>
-    </form>
-    <p id="result"></p>
-    <div class="hint">// hint: unity</div>
-  </div>
-
+<body>
+  <p>ENTER ARCHIVE ACCESS KEY:</p>
+  <form onsubmit="return checkAccess()">
+    > <input id="accessInput" type="text" autofocus autocomplete="off" />
+    <span class="blinker"></span>
+  </form>
+  <p id="result"></p>
   <script>
-    if (!document.referrer.includes("index.html")) {
-      document.body.innerHTML = "> ERROR 403: UNAUTHORIZED ACCESS.";
+    const fromIndex = new URLSearchParams(window.location.search).get("from");
+    if (fromIndex !== "index") {
+      document.body.innerHTML = "> ACCESS DENIED: INVALID ENTRY POINT.";
     }
-
     function checkAccess() {
-      const val = document.getElementById("accessKey").value.trim().toLowerCase();
+      const val = document.getElementById("accessInput").value.trim().toLowerCase();
       const encoded = btoa(val);
       const result = document.getElementById("result");
 
-      if (encoded === "dW5pdHk=") { // unity
-        result.innerHTML = "> Decryption accepted. Launching FINAL NODE...";
-        setTimeout(() => {
-          window.location.href = "stage3.html";
-        }, 2500);
+      if (encoded === "dW5pdHk=") { 
+        result.innerHTML = "> Access granted. Redirecting...";
+        setTimeout(() => window.location.href = "stage3.html", 2000);
+      } else if (val === "roll") {
+        result.innerHTML = "> Media artifact recovered. Routing to legacy...";
+        setTimeout(() => window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 1500);
       } else {
         result.innerHTML = "> ACCESS DENIED: Invalid keyword.";
       }
-
       return false;
     }
   </script>

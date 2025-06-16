@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // FINAL OUTCOME</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MISSION LOG // OUTCOME RECORD</title>
   <style>
     body {
       background: black;
@@ -11,74 +11,96 @@
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
+      margin: 0;
     }
+
     .scanlines::before {
       content: "";
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background-image: repeating-linear-gradient(to bottom,
-        rgba(0,255,153,0.03) 0px,
-        rgba(0,255,153,0.03) 1px,
-        transparent 1px,
-        transparent 2px);
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      z-index: 999;
-      animation: flicker 0.1s infinite;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0,255,153,0.05) 0px,
+        rgba(0,255,153,0.05) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      z-index: 5;
+      animation: flicker 0.15s infinite;
     }
 
     @keyframes flicker {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.96; }
+      50% { opacity: 0.95; }
     }
 
-    .fadeout {
-      animation: fadeOutScreen 2s ease-in-out forwards;
+    .glitch {
+      animation: glitch 0.3s infinite;
+      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
     }
 
-    @keyframes fadeOutScreen {
-      0% { opacity: 1; }
-      100% { opacity: 0; background: black; }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(1px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
+    }
+
+    .link-btn {
+      background: transparent;
+      border: 1px solid #00ff99;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      padding: 0.5rem 1rem;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body class="scanlines">
-  <p>> Decision encoded...</p>
-  <p id="summary"></p>
-  <p>> Logging outcome. Redirecting...</p>
+  <div id="summary">
+    <p>Compiling event records...</p>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const ending = params.get("ending");
-    const reason = decodeURIComponent(params.get("reason") || "").trim();
-    const summaryEl = document.getElementById("summary");
+    const summary = document.getElementById("summary");
+    const ending = new URLSearchParams(window.location.search).get("ending");
 
-    let summary = "";
+    function displaySummary() {
+      if (ending === "strike") {
+        summary.innerHTML = `
+          <p class="glitch">[ OUTCOME: PREEMPTIVE STRIKE ]</p>
+          <p>Orders were confirmed. Warheads launched toward suspected targets. Communications blackout follows.</p>
+          <p>World leaders condemn or vanish. Historians left with fragments.</p>
+        `;
+      } else if (ending === "peace") {
+        summary.innerHTML = `
+          <p class="glitch">[ OUTCOME: DIPLOMATIC RESOLUTION ]</p>
+          <p>You transmitted a ceasefire appeal moments before escalation. A tenuous peace holds—for now.</p>
+          <p>Delegates hail your restraint. But surveillance continues.</p>
+        `;
+      } else {
+        summary.innerHTML = `> INVALID TERMINAL ACCESS. MISSION RECORD CORRUPTED.`;
+        return;
+      }
 
-    switch (ending) {
-      case "israel":
-        summary = "> Israeli tactical strike authorized. Tehran command destabilized. UN proceedings suspended.";
-        break;
-      case "iran":
-        summary = "> Iranian preemptive launch triggered. Multiple capitals on red alert. Retaliatory talks collapsed.";
-        break;
-      case "leak":
-        summary = "> BAKIS archive leak initiated. Civilian uprisings spike. Emergency declassification underway.";
-        break;
-      default:
-        summary = "> Unknown route. Unregistered input received.";
+      const btn = document.createElement("button");
+      btn.className = "link-btn";
+      btn.textContent = "CLAIM YOUR REWARD";
+      btn.onclick = () => {
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScKucEvMVu0QbEHWCuHEwWC618soNHDiqdTDicqTadCVc15Ow/viewform?usp=dialog";
+      };
+      summary.appendChild(btn);
     }
 
-    if (reason) summary += `\n> Rationale: "${reason}"`;
-
-    summaryEl.textContent = summary;
-
-    setTimeout(() => {
-      document.body.classList.add("fadeout");
-      setTimeout(() => {
-        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScKucEvMVu0QbEHWCuHEwWC618soNHDiqdTDicqTadCVc15Ow/viewform?usp=sharing&ouid=113611566142924039745";
-      }, 2000);
-    }, 4000);
+    setTimeout(displaySummary, 2500);
   </script>
 </body>
 </html>

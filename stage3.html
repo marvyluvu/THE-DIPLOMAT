@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRISIS NODE // FINAL CHOICE</title>
+  <title>CRISIS NODE // FINAL DECISION</title>
   <style>
     body {
-      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 2rem;
+      margin: 0;
     }
     .scanlines::before {
       content: "";
@@ -21,51 +21,67 @@
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
-      z-index: 5;
-      animation: flicker 0.2s infinite;
+      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.03) 0px, rgba(0,255,153,0.03) 1px, transparent 1px, transparent 2px);
+      z-index: 999;
+      animation: flicker 0.1s infinite;
     }
     @keyframes flicker {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.9; }
+      50% { opacity: 0.96; }
+    }
+    .terminal {
+      max-width: 800px;
+      margin: auto;
     }
     input {
       background: transparent;
-      border: none;
       color: #00ff99;
-      font-family: 'Courier New', monospace;
+      border: none;
+      font-family: inherit;
       font-size: 16px;
       outline: none;
       width: 60%;
     }
     .blinker {
+      display: inline-block;
       width: 10px;
-      height: 20px;
+      height: 18px;
       background: #00ff99;
       animation: blink 1s step-end infinite;
       margin-left: 4px;
     }
     @keyframes blink { 50% { opacity: 0; } }
     .glitch {
-      animation: glitch 0.3s infinite;
-      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
+      text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      pointer-events: none;
+      mix-blend-mode: screen;
     }
   </style>
 </head>
 <body class="scanlines">
-  <div>
-    <p>INCOMING DIPLOMATIC CRISIS:</p>
-    <p>A nuclear payload has been activated in response to unidentified aggression.</p>
-    <p>You must decide how to proceed:</p>
-    <p>1. Launch preemptive strike</p>
-    <p>2. Attempt final negotiation</p>
-    <p>Enter your choice:</p>
+  <div class="terminal">
+    <p class="glitch">// DIPLOMATIC ACTION REQUIRED</p>
+    <p class="glitch">INCOMING THREAT REPORT: HIGH-ALTITUDE PAYLOAD ARMED</p>
+    <p class="glitch">RESPONSE WINDOW: 90 SECONDS</p>
+    <br>
+    <p>CHOOSE RESPONSE PROTOCOL:</p>
+    <p>1. INITIATE STRATEGIC STRIKE</p>
+    <p>2. ENGAGE IN DIPLOMATIC COMMUNICATION</p>
+    <br>
     <form onsubmit="return choose()">
       &gt; <input id="finalInput" type="text" autofocus autocomplete="off" />
       <span class="blinker"></span>
     </form>
     <p id="verdict"></p>
   </div>
+  <div class="overlay"></div>
 
   <script>
     if (!document.referrer.includes("archive.html")) {
@@ -77,19 +93,18 @@
       const verdict = document.getElementById("verdict");
 
       if (val === "1") {
-        verdict.innerHTML = "Routing strategic launch directive...";
+        verdict.innerHTML = "> Confirmed. STRATEGIC LAUNCH INITIATED...";
         setTimeout(() => {
           window.location.href = "outcome.html?ending=strike";
-        }, 2000);
+        }, 3000);
       } else if (val === "2") {
-        verdict.innerHTML = "Transmitting final diplomatic overture...";
+        verdict.innerHTML = "> Transmitting FINAL PEACE PROPOSAL...";
         setTimeout(() => {
           window.location.href = "outcome.html?ending=peace";
-        }, 2000);
+        }, 3000);
       } else {
-        verdict.innerHTML = "> INVALID SELECTION.";
+        verdict.innerHTML = "> INVALID RESPONSE CODE.";
       }
-
       return false;
     }
   </script>

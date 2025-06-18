@@ -82,7 +82,7 @@
     <p>You must decide how to proceed:</p>
     <p>1. Launch preemptive strike</p>
     <p>2. Attempt final negotiation</p>
-    <p id="countdown">Decision Required In: 00:15</p>
+    <p id="countdown">Decision Required In: 00:10</p>
     <p>Enter your choice:</p>
     <form onsubmit="return choose()">
       &gt; <input id="finalInput" type="text" autofocus autocomplete="off" />
@@ -96,7 +96,7 @@
       document.body.innerHTML = "> ACCESS BLOCKED: UNAUTHORIZED NODE ENTRY.";
     }
 
-    let timeLeft = 15;
+    let timeLeft = 10;
     const countdownEl = document.getElementById("countdown");
 
     const timer = setInterval(() => {
